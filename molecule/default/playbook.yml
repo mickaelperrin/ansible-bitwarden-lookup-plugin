@@ -3,3 +3,7 @@
   hosts: all
   roles:
     - role: ansible-bitwarden-lookup-plugin
+  tasks:
+    - name: get 'password'
+      debug:
+        msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='password') }}"
