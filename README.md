@@ -1,48 +1,67 @@
-Role Name
+Bitwarden Lookup Plugin
 =========
 
-A brief description of the role goes here.
+This is a simple lookup plugin that search for secrets in a Bitwarden vault. 
+It uses the [bitwarden-simple-cli](https://github.com/mickaelperrin/bitwarden-decrypt-cli) python module that 
+greatly improve performance.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should
-be mentioned here. For instance, if the role uses the EC2 module, it may be a
-good idea to mention in this section that the boto package is required.
+You require:
+- python 3.7
+- bitwarden-simple-cli module
 
-Role Variables
---------------
-
-A description of the settable variables for this role should go here, including
-any variables that are in defaults/main.yml, vars/main.yml, and any variables
-that can/should be set via parameters to the role. Any variables that are read
-from other roles and/or the global scope (ie. hostvars, group vars, etc.) should
-be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in
-regards to parameters that may need to be set for other roles, or variables that
-are used from other roles.
+```
+pip3 install bitwarden-simple-ci
+```
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables
-passed in as parameters) is always nice for users too:
-
     - hosts: servers
       roles:
-         - { role: ansible-bitwarden-lookup-plugin, x: 42 }
+        - role: mickaelperrin.ansible-bitwarden-lookup-plugin
+      tasks
+        - debug:
+            msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='name') }}"
+        - debug:
+            msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='username') }}"
+        - debug:
+            msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='password') }}"
+        - debug:
+            msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='my_custom_field_name') }}"
+        - debug:
+            msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='uri') }}"
+        - debug:
+            msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c14', field='notes') }}"            
+
+Tests
+-----
+
+Tests are managed by `pytest` for the python part and `molecule` for the ansible part with `docker` as driver.
+
+```
+mkvirtualenv3 ansible-bitwarden-lookup-plugin
+pip install -r requirements.txt
+```
+
+### Pytest
+
+```
+pytest
+``` 
+
+### Molecule
+
+Ensure that `docker` service is up and running
+
+```
+molecule test
+``` 
 
 License
 -------
 
-BSD
+GPLv3
 
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a
-website (HTML is not allowed).
