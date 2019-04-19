@@ -43,7 +43,7 @@ Tests are managed by `pytest` for the python part and `molecule` for the ansible
 
 ```
 mkvirtualenv3 ansible-bitwarden-lookup-plugin
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 ```
 
 ### Pytest
