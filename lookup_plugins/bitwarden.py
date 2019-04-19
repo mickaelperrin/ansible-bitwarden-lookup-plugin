@@ -57,7 +57,13 @@ class LookupModule(LookupBase):
         for uuid in uuids:
             display.debug("Bitwarden lookup field: %s of uuid: %s" % (field, uuid))
             try:
-                ret.append(CliSimple('bw-simple', 'get', field, uuid).run().rstrip())
+                result = CliSimple('bw-simple', 'get', field, uuid).run()
+                if result is not None:
+                    ret.append(result.rstrip().decode('utf-8'))
+                else:
+                    raise AnsibleError("could not find field: %s" % field)
+            except SystemExit as e:
+                raise AnsibleError(e.code)
             except AnsibleParserError:
                 raise AnsibleError("could not locate uuid: %s" % uuid)
         return ret
