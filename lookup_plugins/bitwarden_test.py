@@ -1,6 +1,7 @@
 import pytest
 from os import path
-from lookup_plugins.ansible_bitwarden_lookup_plugin import LookupModule
+from lookup_plugins.bitwarden import LookupModule
+from ansible.errors import AnsibleError
 
 def common_data(item):
     return dict(
@@ -21,7 +22,7 @@ def common_data(item):
 @pytest.fixture
 def bw_session(monkeypatch):
     monkeypatch.setenv('BW_SESSION', common_data('BW_SESSION'))
-    monkeypatch.setenv('BITWARDENCLI_APPDATA_DIR', path.dirname(__file__))
+    monkeypatch.setenv('BITWARDENCLI_APPDATA_DIR', path.join(path.dirname(__file__), '..', 'molecule', 'default', 'tests'))
 
 
 @pytest.mark.usefixtures("bw_session")
@@ -29,3 +30,11 @@ def test_get_login_organization_password(capsys):
     LookupModule().run([common_data('uuid_login_organization')], field='password')
     std = capsys.readouterr()
     assert std.out == 'acme_login1_password'
+
+
+@pytest.mark.usefixtures("bw_session")
+def test_get_login_organization_password(capsys):
+    with pytest.raises(AnsibleError) as e:
+        LookupModule().run(['missing-uuid'], field='password')
+    assert e.type == AnsibleError
+    assert e.value.message == 'Unable to find entry with id: missing-uuid'

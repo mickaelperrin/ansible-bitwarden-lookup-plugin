@@ -19,3 +19,4 @@ verifier:
   name: testinfra
   lint:
     name: flake8
+    enabled: False
