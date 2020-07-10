@@ -2,7 +2,7 @@
 from __future__ import (absolute_import, division, print_function)
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.plugins.lookup import LookupBase
-from bitwarden_simple_cli.CliSimple import CliSimple
+from bitwarden_simple_cli.Bitwarden import Bitwarden
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -57,7 +57,8 @@ class LookupModule(LookupBase):
         for uuid in uuids:
             display.debug("Bitwarden lookup field: %s of uuid: %s" % (field, uuid))
             try:
-                result = CliSimple('bw-simple', 'get', field, uuid).run()
+                app = Bitwarden()
+                result = app.get(uuid, field)
                 if result is not None:
                     ret.append(result.rstrip().decode('utf-8'))
                 else:
