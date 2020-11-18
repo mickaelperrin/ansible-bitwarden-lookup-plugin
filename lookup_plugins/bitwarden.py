@@ -6,32 +6,32 @@ from bitwarden_simple_cli.CliSimple import CliSimple
 __metaclass__ = type
 
 DOCUMENTATION = """
-      lookup: bitwarden
-        author: Mickaël Perrin <contact@mickaelperrin.fr> 
-        version_added: "1.0"
-        short_description: fast lookup of secrets stored in bitwarden 
-        description:
-            - This plugin uses the bitwarden-simple-cli python module that implements a faster way to retrieve
-            secrets from a bitwarden vault.
-        requirements:
-            - pip module bitwarden-simple-cli 
-            - BW_SESSION environment variable retrieven through the `bw unlock` command. 
-        options:
-          _uuid:
-            description: uuid of the cipher to retrieve
-            required: True
-          field:
-            description: the name of the field to be retrieven 
-            (name, username, password, notes, uri or any custom field)
-            default: password
-            required: False
+lookup: bitwarden
+author: Mickaël Perrin <contact@mickaelperrin.fr>
+version_added: "1.0"
+short_description: fast lookup of secrets stored in bitwarden
+description:
+  - This plugin uses the bitwarden-simple-cli python module that implements a faster way to retrieve
+    secrets from a bitwarden vault.
+requirements:
+  - pip module bitwarden-simple-cli
+  - BW_SESSION environment variable retrieven through the `bw unlock` command.
+options:
+  _uuid:
+    description: uuid of the cipher to retrieve
+    required: True
+  field:
+    description: the name of the field to be retrieven
+      (name, username, password, notes, uri or any custom field)
+    default: password
+    required: False
 """
 
 EXAMPLES = """
-- name: get 'password' 
+- name: get 'password'
   debug:
     msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c1' }}"
-- name: get 'password' 
+- name: get 'password'
   debug:
     msg: "{{ lookup('bitwarden', 'fe6e74aa-a099-4cc1-ae8e-aa3000d02c1', field='password' }}"
 - name: get 'username'
